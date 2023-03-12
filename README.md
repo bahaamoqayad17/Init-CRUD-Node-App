@@ -14,6 +14,16 @@ just replace it with this
 
 queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => "$"+match);
 
+Now you should go to the .env File to setup your enviroment variables
+
+- DataBase Connection String
+- DataBase Password
+- JWT Secret Key
+- etc....
+
+Go to Models Folders and setup your database schema in the models you have entered
+
+Then you are good to go with your application and build it your own way
 
 If you like to enter other Models after running the file already
 You can run it again and it will automaticly add the new models that you added
