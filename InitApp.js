@@ -40,6 +40,32 @@ exports.update = factory.update(%Model%);
 exports.delete = factory.delete(%Model%);
 `;
 
+const UserRouter = `
+const express = require("express");
+const AuthController = require("../Controllers/AuthController");
+const UserController = require("../Controllers/UserController");
+
+const router = express.Router();
+
+router.post("/register", AuthController.register);
+router.post("/login", AuthController.login);
+
+router.use(AuthController.protect);
+
+router
+  .route("/")
+  .get(UserController.index)
+  .post(UserController.create);
+  
+  router
+  .route("/:id")
+  .get(UserController.show)
+  .patch(UserController.update)
+  .delete(UserController.delete);
+  
+module.exports = router;
+  `;
+
 String.prototype.plural = function (revert) {
   var plural = {
     "(quiz)$": "$1zes",
@@ -280,7 +306,7 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 };
 
-exports.signup = CatchAsync(async (req, res, next) => {
+exports.register = CatchAsync(async (req, res, next) => {
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -876,6 +902,8 @@ if (process.argv[2] === "--seed") {
         fs.writeFileSync("Utils/CatchAsync.js", CatchAsync, "utf-8");
         fs.writeFileSync("Utils/AppError.js", AppError, "utf-8");
         fs.writeFileSync("Controllers/ErrorHandler.js", ErrorHandler, "utf-8");
+        fs.writeFileSync("Routes/UserRouter.js", UserRouter, "utf-8");
+
         fs.writeFileSync(
           "Controllers/FactoryHandler.js",
           FactoryHandler,
