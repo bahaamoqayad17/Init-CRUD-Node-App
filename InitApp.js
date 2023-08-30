@@ -180,6 +180,7 @@ if (!fs.existsSync("models")) {
   const morgan = require("morgan");
   const GlobalErrorHandler = require("./Controllers/ErrorHandler");
   const cors = require("cors");
+  const AppError = require("./utils/AppError");
   const path = require("path");${ImportRoutes.join(" ")}
   
   
@@ -768,7 +769,7 @@ exports.index = (Model) =>
         });
         const ReadFiles = modules.map((mymodule) => {
           const module = mymodule.toLowerCase().plural();
-          fs.writeFileSync(`Seeder/${module}.json`, "", "utf-8");
+          fs.writeFileSync(`Seeder/${module}.json`, "[]", "utf-8");
           return `\nconst ${module} = JSON.parse(fs.readFileSync(__dirname+"/${module}.json", "utf-8"));`;
         });
         const ImportModel = modules.map((mymodule) => {
@@ -781,6 +782,7 @@ exports.index = (Model) =>
         const DataBaseSeeder = `const fs = require("fs");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const User = require("../Models/User");
 ${RequireModels.join(" ")}
 
 dotenv.config({ path: "./.env" });
@@ -844,7 +846,10 @@ if (process.argv[2] === "--seed") {
             "%Model%",
             mymodule
           );
-          const Router_Data = RouterData.replaceAll("%Controller%", mymodule);
+          const Router_Data = RouterData.replaceAll(
+            "%Controller%",
+            `${mymodule}Controller`
+          );
           //**********************Models*****************************/
           fs.mkdirSync("Models", { recursive: true });
           fs.writeFileSync(`Models/${mymodule}.js`, Modeldata, "utf-8");
@@ -925,7 +930,7 @@ if (process.argv[2] === "--seed") {
         });
         const ReadFiles = modules.map((mymodule) => {
           const module = mymodule.toLowerCase().plural();
-          fs.writeFileSync(`Seeder/${module}.json`, "", "utf-8");
+          fs.writeFileSync(`Seeder/${module}.json`, "[]", "utf-8");
           return `\nconst ${module} = JSON.parse(fs.readFileSync(__dirname+"/${module}.json", "utf-8"));`;
         });
         const ImportModel = modules.map((mymodule) => {
@@ -955,7 +960,10 @@ if (process.argv[2] === "--seed") {
             "%Model%",
             mymodule
           );
-          const Router_Data = RouterData.replaceAll("%Controller%", mymodule);
+          const Router_Data = RouterData.replaceAll(
+            "%Controller%",
+            `${mymodule}Controller`
+          );
           //**********************Models*****************************/
           fs.writeFileSync(`Models/${mymodule}.js`, Modeldata, "utf-8");
           //**********************Controllers************************/
