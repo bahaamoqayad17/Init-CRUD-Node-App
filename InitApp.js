@@ -66,6 +66,17 @@ router
 module.exports = router;
   `;
 
+const UserController = `
+const factory = require("./FactoryHandler");
+const User = require("../Models/User");
+
+exports.index = factory.index(User);
+exports.create = factory.create(User);
+exports.show = factory.show(User);
+exports.update = factory.update(User);
+exports.delete = factory.delete(User);
+`
+
 String.prototype.plural = function (revert) {
   var plural = {
     "(quiz)$": "$1zes",
@@ -902,6 +913,7 @@ if (process.argv[2] === "--seed") {
         fs.writeFileSync("Utils/CatchAsync.js", CatchAsync, "utf-8");
         fs.writeFileSync("Utils/AppError.js", AppError, "utf-8");
         fs.writeFileSync("Controllers/ErrorHandler.js", ErrorHandler, "utf-8");
+        fs.writeFileSync("Controllers/UserController.js", UserController, "utf-8");
         fs.writeFileSync("Routes/UserRouter.js", UserRouter, "utf-8");
 
         fs.writeFileSync(
